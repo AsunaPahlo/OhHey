@@ -45,7 +45,7 @@ public sealed class TargetListener : IDisposable
 
     private void CheckForTargets()
     {
-        var currentPlayer = _clientState.LocalPlayer;
+        var currentPlayer = _objectTable.LocalPlayer;
         if (currentPlayer == null) return;
 
         var targetingPlayers = _objectTable.PlayerObjects

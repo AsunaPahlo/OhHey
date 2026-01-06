@@ -14,7 +14,7 @@ public sealed class TargetService : IDisposable
     private readonly IPluginLog _logger;
     private readonly TargetListener _targetListener;
     private readonly IChatGui _chatGui;
-    private readonly IClientState _clientState;
+    private readonly IObjectTable _objectTable;
     private readonly ICondition _condition;
     private readonly ConfigurationService _configService;
 
@@ -23,13 +23,13 @@ public sealed class TargetService : IDisposable
     public List<TargetEvent> TargetHistory { get; } = [];
 
     public TargetService(IPluginLog logger, TargetListener targetListener, IChatGui chatGui,
-        ConfigurationService configService, IClientState clientState, ICondition condition)
+        ConfigurationService configService, IObjectTable objectTable, ICondition condition)
     {
         _logger = logger;
         _targetListener = targetListener;
         _chatGui = chatGui;
         _configService = configService;
-        _clientState = clientState;
+        _objectTable = objectTable;
         _condition = condition;
 
         _targetListener.Target += OnTarget;
@@ -98,7 +98,7 @@ public sealed class TargetService : IDisposable
         if (position == -1)
         {
             // This happens when we don't handle self targeting, since we still receive the target removed event.
-            if (_clientState.LocalPlayer?.GameObjectId == e) return;
+            if (_objectTable.LocalPlayer?.GameObjectId == e) return;
             _logger.Warning("Received target removed event for unknown GameObjectId {GameObjectId}", e);
             return;
         }
